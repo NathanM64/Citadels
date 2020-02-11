@@ -4,10 +4,12 @@ import com.montaury.citadels.district.Card;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import com.montaury.citadels.player.Player;
+import io.vavr.collection.HashSet;
 
 
 public class CityTest {
-/*
+
     @Test
     public void scoreConstruction() {
         Board board = new Board();
@@ -21,7 +23,7 @@ public class CityTest {
         int score = city.score(possession);
         Assertions.assertThat(score).isEqualTo(11);
     }
-*/
+
     @Test
     public void plusTroisSiLaCiteComprendLesCinqTypes() {
         Board board = new Board();
@@ -70,6 +72,28 @@ public class CityTest {
         {
             assertThat(score).isEqualTo(22);
         }
+    }
+
+    @Test
+    public void unPointSupPourChaqueCarte() {
+        Board board = new Board();
+        City city = new City(board);
+        city.buildDistrict(Card.MAP_ROOM);
+        Player player = new Player("Quentin",19,city,null);
+        Possession possession = new Possession(0, HashSet.of(Card.PRISON_1,Card.TRADING_POST_1));
+        int score = city.score(possession);
+        assertThat(score).isEqualTo(7);
+    }
+
+    @Test
+    public void unPointSupPourChaquePiece() {
+        Board board = new Board();
+        City city = new City(board);
+        city.buildDistrict(Card.UNIVERSITY);
+        city.buildDistrict(Card.CATHEDRAL_2);
+        Possession possession = new Possession(0,null);
+        int score = city.score(possession);
+        assertThat(score).isEqualTo(13);
     }
 
 }
