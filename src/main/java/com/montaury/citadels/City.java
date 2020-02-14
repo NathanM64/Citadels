@@ -12,6 +12,10 @@ import static com.montaury.citadels.district.District.HAUNTED_CITY;
 
 public class City {
     private static final int END_GAME_DISTRICT_NUMBER = 8;
+    private final int WIN_All_COLORS = 3;
+    private final int IS_COMPLETED_FIRST = 2;
+    private final int IS_COMPLETED = 2;
+    private final int IS_DRAGONGATE_UNIVERSITY = 2;
     private final Board board;
     private List<Card> districtCards = List.empty();
 
@@ -31,64 +35,94 @@ public class City {
     }
 
     public int score(Possession possession) {
-        int score = 0;
-        for (int a = 0; a < districts().size(); a++) {
-            score += districts().get(a).cost();
-        }
+        return getBuildCost() + getBonuses(possession);
+    }
 
-        score = score + districtsScoreBonus(possession);
-        if (winsAllColorBonus()) {
-            score += 5;
+    private int getBuildCost() {
+        int buildCost = 0;
+        for (int carte = 0; carte < districts().size(); carte++) {
+            buildCost += districts().get(carte).cost();
         }
-        if (board.isFirst(this)) {
-            score += (2);
-        }
-        if (isComplete()) {
-            score += (2);
-        }
-        return score;
+        return buildCost;
+    }
+
+    private int getBonuses(Possession possession) {
+        return districtsScoreBonus(possession) + winsAllColorBonus() + isFirst(this) + cityCompleteBonus();
+    }
+
+    private int cityCompleteBonus() {
+        return (isComplete() ? IS_COMPLETED : 0);
+    }
+
+    private int isFirst(City city) {
+        return (board.isFirst(city) ? IS_COMPLETED_FIRST : 0);
     }
 
     private int districtsScoreBonus(Possession possession) {
-        int score = 0;
+        int bonus = 0;
         for (District d : districts()) {
-            if (d == District.DRAGON_GATE) {
-                score = score + 2;
-            }
-            if (d == District.UNIVERSITY) {
-                score = score + 2;
-            }
-            if (d == District.TREASURY) {
-                score += score + possession.gold;
+            if (d == District.DRAGON_GATE || d == District.UNIVERSITY) {
+                bonus += IS_DRAGONGATE_UNIVERSITY;
             }
             if (d == District.MAP_ROOM) {
-                score += possession.hand.size();
+                bonus += possession.hand.size();
             }
+            if (d == District.TREASURY) {
+                bonus += possession.gold;
+            }
+
         }
-        return score;
+        return bonus;
     }
 
-    private boolean winsAllColorBonus() {
-        int districtTypes[] = new int[DistrictType.values().length];
+    private int winsAllColorBonus() {
+        int nbDistricts[] = new int[DistrictType.values().length];
         for (District d : districts()) {
-            districtTypes[d.districtType().ordinal()]++;
+            nbDistricts[d.districtType().ordinal()]++;
         }
-        if (districtTypes[DistrictType.MILITARY.ordinal()] > 0 && districtTypes[DistrictType.NOBLE.ordinal()] > 0 && districtTypes[DistrictType.RELIGIOUS.ordinal()] > 0 && districtTypes[DistrictType.SPECIAL.ordinal()] > 0 && districtTypes[DistrictType.TRADE.ordinal()] > 0)
-            return true;
+        return (hasAllColors(nbDistricts) ? WIN_All_COLORS : 0);
 
-        if (has(HAUNTED_CITY)) {
-            int zeros = 0;
-            for (int i = 0; i < districtTypes.length; i++) {
-                if (districtTypes[i] == 0) {
-                    zeros++;
+    }
+    private boolean hasAllColors(int [] nbDistricts) {
+        return hasEachTypeOfDistrict(nbDistricts) || hasHauntedCityAndMissesOneTypeOfDistrict(nbDistricts);
+    }
+
+        private boolean hasHauntedCityAndMissesOneTypeOfDistrict(int[] nbDistricts) {
+            int nbTypesManquants = 0;
+            if (has(HAUNTED_CITY)) {
+                for (int i = 0; i < nbDistricts.length; i++) {
+                    if (nbDistricts[i] == 0) {
+                        nbTypesManquants++;
+                    }
                 }
             }
-            if (zeros == 1 && districtTypes[DistrictType.SPECIAL.ordinal()] > 1) {
-                return true;
-            }
-            else return false;
-        } else return false;
-    }
+            return nbTypesManquants == 1;
+        }
+
+        private boolean hasEachTypeOfDistrict(int[] nbDistricts) {
+            return hasMilitaryDistrict(nbDistricts) && hasNobleDistrict(nbDistricts) && hasSpecialDistrict(nbDistricts) && hasTradeDistrict(nbDistricts) && hasReligiousDistrict(nbDistricts);
+        }
+
+        private boolean hasMilitaryDistrict(int[] nbDistrictsMain) {
+            return nbDistrictsMain[DistrictType.MILITARY.ordinal()] > 0;
+        }
+
+        private boolean hasNobleDistrict(int[] nbDistrictsMain) {
+            return nbDistrictsMain[DistrictType.NOBLE.ordinal()] > 0;
+        }
+        private boolean hasSpecialDistrict(int[] nbDistrictsMain) {
+            return nbDistrictsMain[DistrictType.SPECIAL.ordinal()] > 0;
+        }
+
+        private boolean hasTradeDistrict(int[] nbDistrictsMain) {
+            return nbDistrictsMain[DistrictType.TRADE.ordinal()] > 0;
+        }
+
+        private boolean hasReligiousDistrict(int[] nbDistrictsMain) {
+            return nbDistrictsMain[DistrictType.RELIGIOUS.ordinal()] > 0;
+        }
+
+
 
     public boolean has(District district) {
         return districts().contains(district);
