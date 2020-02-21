@@ -35,43 +35,56 @@ public class CityTest {
         city.buildDistrict(Card.GREAT_WALL);
         Possession possession = new Possession(0,null);
         int score = city.score(possession);
-        assertThat(score).isEqualTo(19);
+        assertThat(score).isEqualTo(17);
     }
 
     @Test
     public void plusQuatrePourLePremierJoueurQuiACompleteCite() {
         Board board = new Board();
         City city = new City(board);
-        city.buildDistrict(Card.HARBOR_2);
-        city.buildDistrict(Card.MONASTERY_3);
-        city.buildDistrict(Card.MARKET_1);
-        city.buildDistrict(Card.PALACE_2);
         city.buildDistrict(Card.PRISON_3);
-        city.buildDistrict(Card.OBSERVATORY);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
         Possession possession = new Possession(0,null);
         int score = city.score(possession);
-        if (board.isFirst(city) && city.isComplete())
-        {
-            assertThat(score).isEqualTo(22);
-        }
+        assertThat(board.isFirst(city)).isTrue();
+        assertThat(city.isComplete()).isTrue();
+        assertThat(score).isEqualTo(18);
+
     }
 
     @Test
     public void plusDeuxPourAutresJoueursQuiOntCompleteCite() {
         Board board = new Board();
         City city = new City(board);
-        city.buildDistrict(Card.HARBOR_2);
-        city.buildDistrict(Card.MONASTERY_3);
-        city.buildDistrict(Card.MARKET_1);
-        city.buildDistrict(Card.PALACE_2);
         city.buildDistrict(Card.PRISON_3);
-        city.buildDistrict(Card.OBSERVATORY);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
+        city.buildDistrict(Card.PRISON_3);
         Possession possession = new Possession(0,null);
         int score = city.score(possession);
-        if (!board.isFirst(city) && city.isComplete())
-        {
-            assertThat(score).isEqualTo(22);
-        }
+        Board board2 = new Board();
+        City city2 = new City(board);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        city2.buildDistrict(Card.PRISON_3);
+        Possession possession2 = new Possession(0,null);
+        int score2 = city2.score(possession2);
+        assertThat(!board.isFirst(city2)).isTrue();
+        assertThat(city2.isComplete()).isTrue();
+            assertThat(score2).isEqualTo(16);
+
     }
 
     @Test

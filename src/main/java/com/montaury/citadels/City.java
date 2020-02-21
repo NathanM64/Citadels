@@ -11,7 +11,7 @@ import static com.montaury.citadels.district.District.GREAT_WALL;
 import static com.montaury.citadels.district.District.HAUNTED_CITY;
 
 public class City {
-    private static final int END_GAME_DISTRICT_NUMBER = 8;
+    private static final int END_GAME_DISTRICT_NUMBER = 7;
     private final int WIN_All_COLORS = 3;
     private final int IS_COMPLETED_FIRST = 2;
     private final int IS_COMPLETED = 2;
