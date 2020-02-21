@@ -9,26 +9,26 @@ import org.junit.Test;
 public class CityTest {
     @Test
     public void test_score() {
-        Possession possession = new Possession(0, null);
 
         Board board = new Board();
 
         City uneCite = new City(board);
 
-        Player p = new Player("Nathan", 19, uneCite, new ComputerController());
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
+        uneCite.buildDistrict(Card.GREAT_WALL);
 
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
-        uneCite.buildDistrict(Card.GREAT_WALL);
+
+        Possession possession = new Possession(0, null);
 
         int scoreAttendu = uneCite.score(possession);
 
-
         Assertions.assertThat(scoreAttendu).isEqualTo(46);
+
     }
 
     @Test
