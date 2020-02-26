@@ -20,6 +20,7 @@ import io.vavr.collection.Set;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -259,14 +260,18 @@ public class Citadels {
                                     }
                                 } else if (actionType1 == "Destroy district") {
                                     // flemme...
-
+                                    //Retourne tous les roles dont leurs district peuvent être détruit
                                     List<Character> roles = getAvailableRolesForDestruction(groups.associations);
+
                                     Character character = group.player().controller.selectAmong(roles);
 
 
+                                    groups.associationToCharacter(character).peek(association -> association.destroyedBy(group.player()));
+
+                                    //Retourne uniquement les districts des joueurs pouvant être détruit
+                                    List<District> destructableDistricts = getPlayerDestructableDistrict(character);
 
 
-                                    List<District> destructableDistricts = getPlayerDestructableDistrict();
 
 
                                 } else if (actionType1 == "Rob") {
@@ -313,8 +318,12 @@ public class Citadels {
         return roles;
     }
 
-    public static List<District> getPlayerDestructableDistrict() {
-        System.out.println("coucocu");
+    public static List<District> getPlayerDestructableDistrict(Character c) {
+
+        List<District> districts = List.of();
+
+
+
         return null;
     }
 

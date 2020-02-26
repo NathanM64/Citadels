@@ -25,7 +25,7 @@ public class CitadelsTest {
         Player p1 = new Player("toto", 18, cite1, new ComputerController());
 
         City cite2 = new City(board);
-          cite2.buildDistrict(Card.GREAT_WALL);
+        cite2.buildDistrict(Card.GREAT_WALL);
         Player p2 = new Player("tata", 17, cite2, new ComputerController());
 
         List<Group> groups = List.of(new Group(p1, Character.WARLORD), new Group(p2, Character.BISHOP));
@@ -77,7 +77,7 @@ public class CitadelsTest {
     public void test_getPlayerDestructableDistrict_should_return_emty_if_distrits_too_expensive()
     {
 
-        Citadels.getPlayerDestructableDistrict();
+
     }
 
 }
