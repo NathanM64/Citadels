@@ -37,6 +37,10 @@ public class Group {
         stolenBy = Option.of(player);
     }
 
+    public void destroyedBy(Player player){
+        destroyedBy = Option.of(player);
+    }
+
     public Option<Player> thief() {
         return stolenBy;
     }
@@ -45,5 +49,8 @@ public class Group {
     public final Character character;
     private boolean murdered;
     private Option<Player> stolenBy = Option.none();
+    private Option<Player> destroyedBy = Option.none();
     public static final Set<String> OPTIONAL_ACTIONS = HashSet.of("Build district", "End round");
 }
+
+

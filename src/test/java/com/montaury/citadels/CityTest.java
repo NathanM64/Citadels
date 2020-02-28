@@ -35,7 +35,7 @@ public class CityTest {
         city.buildDistrict(Card.GREAT_WALL);
         Possession possession = new Possession(0,null);
         int score = city.score(possession);
-        assertThat(score).isEqualTo(17);
+        assertThat(score).isEqualTo(19);
     }
 
     @Test
