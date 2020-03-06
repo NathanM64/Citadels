@@ -72,6 +72,7 @@ public class Player {
         }
         cards = cards.remove(card);
         city.buildDistrict(card);
+
         gold -= (card.district().cost());
     }
 

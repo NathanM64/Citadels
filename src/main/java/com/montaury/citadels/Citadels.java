@@ -3,6 +3,7 @@ package com.montaury.citadels;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.character.RandomCharacterSelector;
 import com.montaury.citadels.district.Card;
+import com.montaury.citadels.district.DestructibleDistrict;
 import com.montaury.citadels.district.District;
 import com.montaury.citadels.district.DistrictType;
 import com.montaury.citadels.player.ComputerController;
@@ -10,13 +11,11 @@ import com.montaury.citadels.player.HumanController;
 import com.montaury.citadels.player.Player;
 import com.montaury.citadels.round.GameRoundAssociations;
 import com.montaury.citadels.round.Group;
+import com.montaury.citadels.character.Power;
 import com.montaury.citadels.round.action.DestroyDistrictAction;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.vavr.Tuple;
-import io.vavr.collection.Array;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Set;
+import io.vavr.collection.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -144,7 +143,8 @@ public class Citadels {
                             actionExecuted(group, actionType, associations);
 
                             // receive powers from the character
-                            List<String> powers = null;
+                            List<String> powers = null ;
+                            //powers = Power.assignment(group, powers);
                             if (group.character == Character.ASSASSIN) {
                                 powers = List.of("Kill");
                             } else if (group.character == Character.THIEF) {
@@ -158,7 +158,7 @@ public class Citadels {
                             } else if (group.character == Character.MERCHANT) {
                                 powers = List.of("Receive income", "Receive 1 gold");
                             } else if (group.character == Character.ARCHITECT) {
-                                powers = List.of("Pick 2 cards", "Build district", "Build district");
+                                powers = List.of("Pick 2 cards", "Build district");
                             } else if (group.character == Character.WARLORD) {
                                 powers = List.of("Receive income", "Destroy district");
                             } else {
@@ -211,7 +211,9 @@ public class Citadels {
                                 if (actionType1 == "End round") {
                                 } else if (actionType1 == "Build district") {
                                     Card card = group.player().controller.selectAmong(group.player().buildableDistrictsInHand());
-                                    group.player().buildDistrict(card);
+                                    if(group.character()!= Character.ALCHEMIST) {
+                                        group.player().buildDistrict(card);
+                                    }
                                 } else if (actionType1 == "Discard card for 2 coins") {
                                     Player player = group.player();
                                     Card card = player.controller.selectAmong(player.cards());
@@ -260,16 +262,24 @@ public class Citadels {
                                     }
                                 } else if (actionType1 == "Destroy district") {
                                     // flemme...
-                                    //Retourne tous les roles dont leurs district peuvent être détruit
-                                    List<Character> roles = getAvailableRolesForDestruction(groups.associations);
 
-                                    Character character = group.player().controller.selectAmong(roles);
+                                    Map<Player, List<DestructibleDistrict>> districtsByPlayers = DestroyDistrictAction.districtsDestructibleBy(groups, group.player());
+                                    DestructibleDistrict destructibleDistrict = group.player().controller.selectDistrictToDestroyAmong(districtsByPlayers);
+                                    System.out.println("selected destructible district :" + destructibleDistrict.toString());
 
-
-                                    groups.associationToCharacter(character).peek(association -> association.destroyedBy(group.player()));
-
-                                    //Retourne uniquement les districts des joueurs pouvant être détruit
-                                    List<District> destructableDistricts = getPlayerDestructableDistrict(character);
+                                    group.player().pay(destructibleDistrict.destructionCost());
+//
+//                                    List<Character> roles = getAvailableRolesForDestruction(groups.associations);
+//
+//
+//                                    Character character = group.player().controller.selectAmong(roles);
+//
+//                                    List<Player> playersToDestructDistrict = groups.associations.filter();
+//
+//                                    groups.associationToCharacter(character).peek(association -> association.destroyedBy(group.player()));
+//
+//                                    //Retourne uniquement les districts du joueur choisit pouvant être détruit
+//                                    List<District> destructableDistricts = getPlayerDestructableDistrict(roles);
 
 
 
@@ -300,25 +310,21 @@ public class Citadels {
                 .map(Group::player));
     }
 
-    public static List<Character> getAvailableRolesForDestruction(List<Group> groups) {
+//    public static List<Character> getAvailableRolesForDestruction(List<> groups) {
+//
+//        List<Group> roles = List.of();
+//        for (Group group: groups)
+//        {
+//            if (group.player().city().districts().size() == 0)continue;
+//            if (group.character.equals(Character.BISHOP) && !group.isMurdered())continue;
+//
+//            roles = roles.append(group);
+//        }
+//        return roles;
+//    }
 
-        List<Character> roles = List.of();
-        for (Group group: groups)
-        {
-            if (group.player().city().districts().size() == 0) {
-                continue;
-            }
-            if (group.character.equals(Character.BISHOP) && !group.isMurdered())
-            {
-                continue;
-            }
-            roles = roles.append(group.character);
-        }
+    public static List<District> getPlayerDestructableDistrict(List<Group> roles) {
 
-        return roles;
-    }
-
-    public static List<District> getPlayerDestructableDistrict(Character c) {
 
         List<District> districts = List.of();
 
