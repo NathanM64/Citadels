@@ -1,6 +1,10 @@
 package com.montaury.citadels;
 
+import com.montaury.citadels.character.Character;
 import com.montaury.citadels.district.Card;
+import com.montaury.citadels.player.HumanController;
+import com.montaury.citadels.player.PlayerController;
+import com.montaury.citadels.round.Group;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,6 +111,17 @@ public class CityTest {
         Possession possession = new Possession(0,null);
         int score = city.score(possession);
         assertThat(score).isEqualTo(13);
+    }
+
+    @Test
+    public void retrieveCoinAlchemist() {
+        Board board = new Board();
+        City city = new City(board);
+        Player player = new Player("Quentin",19,city,null);
+        new Group(player, Character.MERCHANT);
+        Possession possession = new Possession(10,null);
+        player.buildDistrict(Card.CHURCH_1);
+        assertThat(possession.gold).isEqualTo(10);
     }
 
 }

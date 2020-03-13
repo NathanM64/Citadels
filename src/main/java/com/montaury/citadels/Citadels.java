@@ -3,7 +3,6 @@ package com.montaury.citadels;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.character.RandomCharacterSelector;
 import com.montaury.citadels.district.Card;
-import com.montaury.citadels.district.DestructibleDistrict;
 import com.montaury.citadels.district.District;
 import com.montaury.citadels.district.DistrictType;
 import com.montaury.citadels.player.ComputerController;
@@ -15,7 +14,6 @@ import com.montaury.citadels.round.action.DestroyDistrictAction;
 import io.vavr.Tuple;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
-import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 
 import java.util.Collections;
@@ -73,7 +71,7 @@ public class Citadels {
             Collections.rotate(list, -players.indexOf(crown));
             List<Player> playersInOrder = List.ofAll(list);
             RandomCharacterSelector randomCharacterSelector = new RandomCharacterSelector();
-            List<Character> availableCharacters = List.of(Character.ASSASSIN, Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD);
+            List<Character> availableCharacters = List.of(Character.ASSASSIN, Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST);
 
             List<Character> availableCharacters1 = availableCharacters;
             List<Character> discardedCharacters = List.empty();
@@ -122,10 +120,9 @@ public class Citadels {
                         // keep only actions that player can realize
                         List<String> possibleActions = List.empty();
                         for (String action : availableActions) {
-                            if ((action.equals(DRAW_2_CARDS_AND_KEEP_1) && (pioche.canDraw(2))) || (action.equals(DRAW_3_CARDS_AND_KEEP_1) && (pioche.canDraw(3))) ) {
+                            if ((action.equals(DRAW_2_CARDS_AND_KEEP_1) && (pioche.canDraw(2))) || (action.equals(DRAW_3_CARDS_AND_KEEP_1) && (pioche.canDraw(3)))) {
                                 possibleActions = possibleActions.append(DRAW_2_CARDS_AND_KEEP_1);
-                            }
-                            else {
+                            } else {
                                 possibleActions = possibleActions.append(action);
                             }
                         }
@@ -167,7 +164,7 @@ public class Citadels {
                                 powers = List.of(RECEIVE_INCOME);
                                 break;
                             case MERCHANT:
-                                powers = List.of(RECEIVE_INCOME,RECEIVE_1_GOLD);
+                                powers = List.of(RECEIVE_INCOME, RECEIVE_1_GOLD);
                                 break;
                             case ARCHITECT:
                                 powers = List.of(PICK_2_CARDS, BUILD_DISTRICT, BUILD_DISTRICT);
@@ -175,16 +172,19 @@ public class Citadels {
                             case WARLORD:
                                 powers = List.of(RECEIVE_INCOME, DESTROY_DISTRICT);
                                 break;
+                            case ALCHEMIST:
+                                powers = List.empty();
+                                break;
                             default:
                                 System.out.println("Uh oh");
                                 break;
                         }
+
                         List<String> extraActions = List.empty();
                         for (District d : group.player().city().districts()) {
                             if (d == District.SMITHY) {
                                 extraActions = extraActions.append(DRAW_3_CARDS_FOR_2_COINS);
-                            }
-                            else if (d == District.LABORATORY) {
+                            } else if (d == District.LABORATORY) {
                                 extraActions = extraActions.append(DISCARD_CARD_FOR_2_COINS);
                             }
                         }
@@ -239,8 +239,13 @@ public class Citadels {
                                 case BUILD_DISTRICT: {
                                     Card card = group.player().controller.selectAmong(group.player().buildableDistrictsInHand());
                                     group.player().buildDistrict(card);
+                                    if (group.character().equals(Character.ALCHEMIST)) {
+                                        group.player().add(card.district().cost());
+                                    }
                                     break;
                                 }
+
+
                                 case DISCARD_CARD_FOR_2_COINS: {
                                     Player player = group.player();
                                     Card card = player.controller.selectAmong(player.cards());
@@ -263,7 +268,7 @@ public class Citadels {
                                     group.player().exchangeHandWith(playerToSwapWith);
                                     break;
                                 case KILL:
-                                    Character characterToMurder = group.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD));
+                                    Character characterToMurder = group.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST));
                                     groups.associationToCharacter(characterToMurder).peek(Group::murder);
                                     break;
                                 case PICK_2_CARDS:
@@ -277,7 +282,7 @@ public class Citadels {
                                     break;
                                 case RECEIVE_INCOME:
                                     DistrictType type = null;
-                                    switch (group.character){
+                                    switch (group.character) {
                                         case BISHOP:
                                             type = DistrictType.RELIGIOUS;
                                             break;
@@ -309,7 +314,7 @@ public class Citadels {
                                     destroyDistrict();
                                     break;
                                 case ROB:
-                                    Character character = group.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD)
+                                    Character character = group.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD,Character.ALCHEMIST)
                                             .removeAll(groups.associations.find(Group::isMurdered).map(Group::character)));
                                     groups.associationToCharacter(character).peek(association -> association.stolenBy(group.player()));
                                     break;
@@ -398,13 +403,11 @@ public class Citadels {
     public static List<Character> getAvailableRolesForDestruction(List<Group> groups) {
 
         List<Character> roles = List.of();
-        for (Group group: groups)
-        {
+        for (Group group : groups) {
             if (group.player().city().districts().size() == 0) {
                 continue;
             }
-            if (group.character.equals(Character.BISHOP) && !group.isMurdered())
-            {
+            if (group.character.equals(Character.BISHOP) && !group.isMurdered()) {
                 continue;
             }
             roles = roles.append(group.character);
@@ -416,7 +419,6 @@ public class Citadels {
     public static List<District> getPlayerDestructableDistrict(Character c) {
 
         List<District> districts = List.of();
-
 
 
         return null;
