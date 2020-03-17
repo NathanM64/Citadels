@@ -43,6 +43,10 @@ public class Citadels {
         String playerName = scanner.next();
         System.out.println("Quel est votre age ? ");
         int playerAge = scanner.nextInt();
+        while (!(playerAge>0 && playerAge<150)){
+            System.out.println("Saisir un âge concret ");
+            playerAge = scanner.nextInt();
+        }
         Board board = new Board();
         Player p = new Player(playerName, playerAge, new City(board), new HumanController());
         p.human = true;
