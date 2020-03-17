@@ -1,6 +1,7 @@
 package com.montaury.citadels;
 
 import com.montaury.citadels.character.Character;
+import com.montaury.citadels.character.Power;
 import com.montaury.citadels.character.RandomCharacterSelector;
 import com.montaury.citadels.district.Card;
 import com.montaury.citadels.district.District;
@@ -153,36 +154,7 @@ public class Citadels {
 
                         // receive powers from the character
                         List<String> powers = null;
-                        switch (group.character) {
-                            case ASSASSIN:
-                                powers = List.of(KILL);
-                                break;
-                            case THIEF:
-                                powers = List.of(ROB);
-                                break;
-                            case MAGICIAN:
-                                powers = List.of(EXCHANGE_CARDS_WITH_PLAYER, EXCHANGE_CARDS_WITH_PILE);
-                                break;
-                            case KING:
-                            case BISHOP:
-                                powers = List.of(RECEIVE_INCOME);
-                                break;
-                            case MERCHANT:
-                                powers = List.of(RECEIVE_INCOME, RECEIVE_1_GOLD);
-                                break;
-                            case ARCHITECT:
-                                powers = List.of(PICK_2_CARDS, BUILD_DISTRICT, BUILD_DISTRICT);
-                                break;
-                            case WARLORD:
-                                powers = List.of(RECEIVE_INCOME, DESTROY_DISTRICT);
-                                break;
-                            case ALCHEMIST:
-                                powers = List.empty();
-                                break;
-                            default:
-                                System.out.println("Uh oh");
-                                break;
-                        }
+                        powers = Power.assignment(group, powers);
 
                         List<String> extraActions = List.empty();
                         for (District d : group.player().city().districts()) {
