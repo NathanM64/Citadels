@@ -40,9 +40,9 @@ public enum Power {
     }
 
 
-    public List<Power> assignment(Group group, List<Power> powers){
+    public static List<Power> assignment(Group group, List<Power> powers){
 
-        for (Group g: group) {
+
             if (group.character == Character.ASSASSIN) {
                 powers = List.of(Power.ASSASSIN);
             } else if (group.character == Character.THIEF) {
@@ -62,7 +62,7 @@ public enum Power {
             } else {
                 System.out.println("Uh oh");
             }
-        }
+
         return powers;
     }
 
