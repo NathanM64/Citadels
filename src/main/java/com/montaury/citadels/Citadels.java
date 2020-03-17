@@ -43,7 +43,7 @@ public class Citadels {
         String playerName = scanner.next();
         System.out.println("Quel est votre age ? ");
         int playerAge = scanner.nextInt();
-        while (!(playerAge>0 && playerAge<150)){
+        while (!(playerAge>0 && playerAge<100)){
             System.out.println("Saisir un âge concret ");
             playerAge = scanner.nextInt();
         }
