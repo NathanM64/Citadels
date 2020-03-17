@@ -11,7 +11,7 @@ public enum Power {
     BISHOP("Receive income"),
     MERCHANT("Receive income", "Receive 1 gold"),
     ARCHITECT("Build district", "Pick 2 cards"),
-    WARLORD("Destroy district", "Receive income");
+    WARLORD("Receive income", "Destroy district");
 
     private String action;
     private String action2;
@@ -21,12 +21,12 @@ public enum Power {
     }
     Power(String action, String action2) {
         this.action = action;
-        this.action = action2;
+        this.action2 = action2;
     }
     Power(String action, String action2, String action3) {
         this.action = action;
-        this.action = action2;
-        this.action = action3;
+        this.action2 = action2;
+        this.action3 = action3;
     }
 
     public String getAction() {
@@ -40,25 +40,25 @@ public enum Power {
     }
 
 
-    public static List<Power> assignment(Group group, List<Power> powers){
+    public static List<String> assignment(Group group, List<String> powers){
 
 
             if (group.character == Character.ASSASSIN) {
-                powers = List.of(Power.ASSASSIN);
+                powers = List.of(Power.ASSASSIN.getAction());
             } else if (group.character == Character.THIEF) {
-                powers = List.of(Power.THIEF);
+                powers = List.of(Power.THIEF.getAction());
             } else if (group.character == Character.MAGICIAN) {
-                powers = List.of(Power.MAGICIAN);
+                powers = List.of(Power.MAGICIAN.getAction(), Power.MAGICIAN.getAction2());
             } else if (group.character == Character.KING) {
-                powers = List.of(Power.KING);
+                powers = List.of(Power.KING.getAction());
             } else if (group.character == Character.BISHOP) {
-                powers = List.of(Power.BISHOP);
+                powers = List.of(Power.BISHOP.getAction());
             } else if (group.character == Character.MERCHANT) {
-                powers = List.of(Power.MERCHANT);
+                powers = List.of(Power.MERCHANT.getAction(), Power.MERCHANT.getAction2());
             } else if (group.character == Character.ARCHITECT) {
-                powers = List.of(Power.ARCHITECT);
+                powers = List.of(Power.ARCHITECT.getAction(), Power.ARCHITECT.getAction2());
             } else if (group.character == Character.WARLORD) {
-                powers = List.of(Power.WARLORD);
+                powers = List.of(Power.WARLORD.getAction(), Power.WARLORD.getAction2());
             } else {
                 System.out.println("Uh oh");
             }

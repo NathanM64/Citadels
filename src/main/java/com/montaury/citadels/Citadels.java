@@ -144,26 +144,8 @@ public class Citadels {
 
                             // receive powers from the character
                             List<String> powers = null ;
-                            //powers = Power.assignment(group, powers);
-                            if (group.character == Character.ASSASSIN) {
-                                powers = List.of("Kill");
-                            } else if (group.character == Character.THIEF) {
-                                powers = List.of("Rob");
-                            } else if (group.character == Character.MAGICIAN) {
-                                powers = List.of("Exchange cards with other player", "Exchange cards with pile");
-                            } else if (group.character == Character.KING) {
-                                powers = List.of("Receive income");
-                            } else if (group.character == Character.BISHOP) {
-                                powers = List.of("Receive income");
-                            } else if (group.character == Character.MERCHANT) {
-                                powers = List.of("Receive income", "Receive 1 gold");
-                            } else if (group.character == Character.ARCHITECT) {
-                                powers = List.of("Pick 2 cards", "Build district");
-                            } else if (group.character == Character.WARLORD) {
-                                powers = List.of("Receive income", "Destroy district");
-                            } else {
-                                System.out.println("Uh oh");
-                            }
+                            powers = Power.assignment(group, powers);
+
                             List<String> extraActions = List.empty();
                             for (District d : group.player().city().districts()) {
                                 if (d == District.SMITHY) {
