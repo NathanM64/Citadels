@@ -118,7 +118,7 @@ public class CityTest {
         Board board = new Board();
         City city = new City(board);
         Player player = new Player("Quentin",19,city,null);
-        new Group(player, Character.MERCHANT);
+        new Group(player, Character.ALCHEMIST);
         Possession possession = new Possession(10,null);
         player.buildDistrict(Card.CHURCH_1);
         assertThat(possession.gold).isEqualTo(10);

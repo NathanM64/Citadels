@@ -12,7 +12,8 @@ public enum Character {
     MERCHANT(6, "Merchant", DistrictType.TRADE),
     ARCHITECT(7, "Architect"),
     WARLORD(8, "Warlord", DistrictType.MILITARY),
-    ALCHEMIST(6 , "Alchemist");
+    ALCHEMIST(6 , "Alchemist"),
+    BAILLI(8,"Bailli");
 
     Character(int number, String name)
     {

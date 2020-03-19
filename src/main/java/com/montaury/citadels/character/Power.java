@@ -61,6 +61,8 @@ public enum Power {
             powers = List.of(Power.WARLORD.getAction(), Power.WARLORD.getAction2());
         } else if (group.character == Character.ALCHEMIST) {
             powers = List.empty();
+        }else if (group.character == Character.BAILLI) {
+            powers = List.empty();
         }
         else {
             System.out.println("Uh oh");

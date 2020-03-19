@@ -76,7 +76,7 @@ public class Citadels {
             Collections.rotate(list, -players.indexOf(crown));
             List<Player> playersInOrder = List.ofAll(list);
             RandomCharacterSelector randomCharacterSelector = new RandomCharacterSelector();
-            List<Character> availableCharacters = List.of(Character.ASSASSIN, Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST);
+            List<Character> availableCharacters = List.of(Character.ASSASSIN, Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST, Character.BAILLI);
 
             List<Character> availableCharacters1 = availableCharacters;
             List<Character> discardedCharacters = List.empty();
@@ -210,8 +210,18 @@ public class Citadels {
                             String actionType1 = group.player().controller.selectActionAmong(possibleActions2.toList());
                             // execute selected action
                             switch (actionType1) {
-                                case "End round":
+                                case "End round": /*{
+                                    if (group.player().gold() > 0) {
+                                        group.player().pay(1);
+                                        if (group.character().equals(Character.BAILLI)) {
+                                            group.player().add(1);
+
+
+                                        }
+                                    }*/
                                     break;
+
+
                                 case BUILD_DISTRICT: {
                                     Card card = group.player().controller.selectAmong(group.player().buildableDistrictsInHand());
                                     group.player().buildDistrict(card);
@@ -244,7 +254,7 @@ public class Citadels {
                                     group.player().exchangeHandWith(playerToSwapWith);
                                     break;
                                 case KILL:
-                                    Character characterToMurder = group.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST));
+                                    Character characterToMurder = group.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD, Character.ALCHEMIST, Character.BAILLI));
                                     groups.associationToCharacter(characterToMurder).peek(Group::murder);
                                     break;
                                 case PICK_2_CARDS:
@@ -290,7 +300,7 @@ public class Citadels {
                                     destroyDistrict();
                                     break;
                                 case ROB:
-                                    Character character = group.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD,Character.ALCHEMIST)
+                                    Character character = group.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD,Character.ALCHEMIST, Character.BAILLI)
                                             .removeAll(groups.associations.find(Group::isMurdered).map(Group::character)));
                                     groups.associationToCharacter(character).peek(association -> association.stolenBy(group.player()));
                                     break;
