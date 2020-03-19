@@ -6,7 +6,7 @@ import io.vavr.collection.List;
 public enum Power {
     ASSASSIN("Kill"),
     THIEF("Rob"),
-    MAGICIAN("Exchange cards with other player","Exchange card with pile"),
+    MAGICIAN("Exchange cards with other player","Exchange cards with pile"),
     KING("Receive income"),
     BISHOP("Receive income"),
     MERCHANT("Receive income", "Receive 1 gold"),

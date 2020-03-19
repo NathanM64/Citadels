@@ -210,18 +210,17 @@ public class Citadels {
                             String actionType1 = group.player().controller.selectActionAmong(possibleActions2.toList());
                             // execute selected action
                             switch (actionType1) {
-                                case "End round": /*{
+                                case "End round": {
                                     if (group.player().gold() > 0) {
-                                        group.player().pay(1);
-                                        if (group.character().equals(Character.BAILLI)) {
-                                            group.player().add(1);
-
-
+                                        for (Group gr : groups.associations) {
+                                            if (gr.character().equals(Character.BAILLI)) {
+                                                gr.player().add(1);
+                                                group.player().pay(1);
+                                            }
                                         }
-                                    }*/
+                                    }
                                     break;
-
-
+                                }
                                 case BUILD_DISTRICT: {
                                     Card card = group.player().controller.selectAmong(group.player().buildableDistrictsInHand());
                                     group.player().buildDistrict(card);
