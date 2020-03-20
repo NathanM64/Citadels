@@ -43,11 +43,15 @@ public class Citadels {
         System.out.println("Hello! Quel est votre nom ? ");
         String playerName = scanner.next();
         System.out.println("Quel est votre age ? ");
-        int playerAge = scanner.nextInt();
-        while (!(playerAge>0 && playerAge<100)){
+        String ageSaisi;
+        int playerAge=0;
+        do {
             System.out.println("Saisir un âge concret ");
-            playerAge = scanner.nextInt();
-        }
+            ageSaisi = scanner.next();
+            try {
+                playerAge = Integer.parseInt(ageSaisi);
+            }catch(NumberFormatException e){ }
+        }while(!(playerAge>0 && playerAge<100 ));
         Board board = new Board();
         Player p = new Player(playerName, playerAge, new City(board), new HumanController());
         p.human = true;
