@@ -87,8 +87,7 @@ public class CityTest {
         int score2 = city2.score(possession2);
         assertThat(!board.isFirst(city2)).isTrue();
         assertThat(city2.isComplete()).isTrue();
-            assertThat(score2).isEqualTo(16);
-
+        assertThat(score2).isEqualTo(16);
     }
 
     @Test

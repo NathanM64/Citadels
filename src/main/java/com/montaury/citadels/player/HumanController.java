@@ -13,14 +13,26 @@ public class HumanController implements PlayerController {
 
     @Override
     public Character selectOwnCharacter(List<Character> availableCharacters, List<Character> faceUpRevealedCharacters) {
-        displayCharactersForSelection(availableCharacters, faceUpRevealedCharacters);
-        return availableCharacters.get(scanner.nextInt() - 1);
+
+        int indice;
+        do {
+            displayCharactersForSelection(availableCharacters, faceUpRevealedCharacters);
+            indice = scanner.nextInt();
+        }while (indice < 1 || indice > availableCharacters.size());
+
+        return availableCharacters.get(indice - 1);
     }
 
     @Override
     public String selectActionAmong(List<String> actions) {
-        displayActionsForSelection(actions);
-        return actions.get(scanner.nextInt() - 1);
+
+        int indice;
+        do {
+            displayActionsForSelection(actions);
+            indice = scanner.nextInt();
+        }while (indice < 1 || indice > actions.size());
+
+        return actions.get(indice - 1);
     }
 
     private void displayActionsForSelection(List<String> actions) {
